@@ -3,190 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Otto's Auto Parts Payment Calculator</title>
+    <title>Mosley's Auto Quarters Invoice Tool</title>
     <style>
         :root {
-            --bg-color: #313338;
-            --card-color: #2b2d31;
-            --text-color: #dbdee1;
-            --primary-blue: #5865f2;
-            --employee-green: #248046;
-            --repair-red: #da373c;
-            --gray-btn: #4e5058;
+            --bg-color: #313338; --card-color: #2b2d31; --text-color: #dbdee1;
+            --primary-blue: #5865f2; --employee-green: #248046; --repair-red: #da373c;
             --accent-gold: #f2c45e;
         }
-
-        body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .calculator-card {
-            background-color: var(--card-color);
-            padding: 24px;
-            border-radius: 8px;
-            width: 350px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-        }
-
-        h2 { margin-top: 0; font-size: 1.2rem; color: #fff; }
-        .sub-desc { font-size: 0.85rem; color: #b5bac1; margin-bottom: 20px; border-bottom: 1px solid #4e5058; padding-bottom: 10px; }
-
-        .group-label { font-size: 0.7rem; font-weight: bold; margin-bottom: 8px; color: #949ba4; text-transform: uppercase; letter-spacing: 0.5px; }
-
-        .btn-group { display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; }
-
-        button {
-            border: none;
-            border-radius: 3px;
-            padding: 8px 12px;
-            color: white;
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 0.85rem;
-            opacity: 0.5;
-            transition: all 0.2s;
-            flex-grow: 1;
-        }
-
-        button.active { opacity: 1; box-shadow: 0 0 10px rgba(255,255,255,0.15); transform: translateY(-1px); }
-
-        .btn-customer { background-color: var(--primary-blue); }
-        .btn-employee { background-color: var(--employee-green); }
-        .btn-pdems { background-color: #72767d; }
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .calculator-card { background-color: var(--card-color); padding: 24px; border-radius: 8px; width: 380px; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
+        h2 { margin: 0 0 5px 0; font-size: 1.2rem; color: #fff; text-align: center;}
+        .sub-desc { font-size: 0.8rem; color: #b5bac1; margin-bottom: 20px; text-align: center; border-bottom: 1px solid #4e5058; padding-bottom: 10px; }
+        .group-label { font-size: 0.7rem; font-weight: bold; margin-bottom: 8px; color: #949ba4; text-transform: uppercase; }
+        .btn-group { display: flex; gap: 5px; margin-bottom: 15px; flex-wrap: wrap; }
+        button { border: none; border-radius: 3px; padding: 8px; color: white; cursor: pointer; font-size: 0.8rem; opacity: 0.4; transition: 0.2s; flex: 1; }
+        button.active { opacity: 1; outline: 2px solid #fff; }
+        .btn-role { background-color: var(--primary-blue); }
+        .btn-type { background-color: #4e5058; }
         .btn-repair { background-color: var(--repair-red); }
-        .btn-deg { background-color: #4e5058; }
-        .btn-items { background-color: #4e5058; }
-
-        .input-section { margin: 20px 0; }
-        input {
-            width: 100%;
-            padding: 12px;
-            background: #1e1f22;
-            border: 1px solid #1e1f22;
-            border-radius: 4px;
-            color: white;
-            box-sizing: border-box;
-            font-size: 1.1rem;
-            outline: none;
-        }
-        input:focus { border: 1px solid var(--primary-blue); }
-
-        .results {
-            background: #1e1f22;
-            padding: 15px;
-            border-radius: 4px;
-            margin-top: 20px;
-            border-left: 4px solid var(--accent-gold);
-        }
-
-        .result-line { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.85rem; }
-        .tax-line { color: #80848e; font-style: italic; }
-        .total-line { margin-top: 10px; padding-top: 10px; font-weight: bold; color: var(--accent-gold); font-size: 1.2rem; }
+        .input-section { margin: 15px 0; }
+        input { width: 100%; padding: 12px; background: #1e1f22; border: 1px solid #4e5058; border-radius: 4px; color: white; font-size: 1.1rem; box-sizing: border-box; }
+        .results { background: #1e1f22; padding: 15px; border-radius: 4px; margin-top: 15px; border-left: 4px solid var(--accent-gold); }
+        .result-line { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.9rem; }
+        .total-line { margin-top: 8px; padding-top: 8px; font-weight: bold; color: var(--accent-gold); font-size: 1.3rem; border-top: 1px solid #4e5058; }
+        .item-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 10px; }
+        .item-btn { background: #383a40; padding: 5px; font-size: 0.7rem; opacity: 1; border: 1px solid #4e5058; }
+        .item-btn:hover { background: #404249; }
     </style>
 </head>
 <body>
-
 <div class="calculator-card">
-    <h2>Otto's Invoice Tool</h2>
-    <div class="sub-desc">Calculate multiplied price (Game adds tax)</div>
+    <h2>Mosley's Auto Quarters</h2>
+    <div class="sub-desc">Internal Invoice Calculator</div>
 
     <div class="group-label">Recipient</div>
     <div class="btn-group" id="roleGroup">
-        <button class="btn-customer active" onclick="setRole('customer', this)">Customer</button>
-        <button class="btn-employee" onclick="setRole('employee', this)">Employee</button>
-        <button class="btn-pdems" onclick="setRole('pdems', this)">PD/EMS</button>
+        <button class="btn-role active" onclick="setRole('customer', this)">Customer</button>
+        <button class="btn-role" onclick="setRole('employee', this)">Employee</button>
+        <button class="btn-role" onclick="setRole('pdems', this)">PD/EMS</button>
     </div>
 
-    <div class="group-label">Service Type</div>
+    <div class="group-label">Service</div>
     <div class="btn-group" id="typeGroup">
         <button class="btn-repair" onclick="setType('repair', this)">Repair</button>
-        <button class="btn-deg" onclick="setType('deg', this)">DEG</button>
-        <button class="btn-items active" onclick="setType('items', this)">Customs</button>
+        <button class="btn-type" onclick="setType('deg', this)">DEG</button>
+        <button class="btn-type active" onclick="setType('items', this)">Customs</button>
     </div>
 
     <div class="input-section">
-        <div class="group-label" id="inputLabel">Enter Shelf Price ($)</div>
+        <div class="group-label" id="inputLabel">Shelf Price ($)</div>
         <input type="number" id="amountInput" placeholder="0.00" oninput="calculate()">
     </div>
 
+    <div class="group-label">Quick Selection</div>
+    <div class="item-grid">
+        <button class="item-btn" onclick="quickSet(500)">Lrg Kit ($500)</button>
+        <button class="item-btn" onclick="quickSet(200)">Med Kit ($200)</button>
+        <button class="item-btn" onclick="quickSet(200)">Adv Lock ($200)</button>
+        <button class="item-btn" onclick="quickSet(100)">Lithium ($100)</button>
+    </div>
+
     <div class="results">
-        <div class="result-line total-line">
-            <span>Invoice Amt:</span> 
-            <span id="resTotal">$0.00</span>
-        </div>
-        <div class="result-line tax-line">
-            <span>+ Game Tax (5%):</span> 
-            <span id="resTax">$0.00</span>
+        <div class="result-line total-line"><span>Invoice Total:</span> <span id="resTotal">$0.00</span></div>
+        <div class="result-line" style="color:#80848e; font-size:0.75rem; margin-top:5px;">
+            <span>Game adds 5% tax automatically.</span>
         </div>
     </div>
 </div>
 
 <script>
-    let currentRole = 'customer';
-    let currentType = 'items';
-
-    function setRole(role, btn) {
-        currentRole = role;
-        updateButtons('roleGroup', btn);
-        calculate();
+    let currentRole = 'customer'; let currentType = 'items';
+    function setRole(r, b) { currentRole = r; updateBtns('roleGroup', b); calculate(); }
+    function setType(t, b) { currentType = t; updateBtns('typeGroup', b); 
+        document.getElementById('inputLabel').innerText = (t === 'items') ? "Shelf Price ($)" : "Materials Used (Qty)";
+        calculate(); 
     }
-
-    function setType(type, btn) {
-        currentType = type;
-        updateButtons('typeGroup', btn);
-        
-        const label = document.getElementById('inputLabel');
-        if (type === 'repair' || type === 'deg') {
-            label.innerText = "Enter Materials Used (Qty)";
-        } else {
-            label.innerText = "Enter Shelf Price ($)";
-        }
-        calculate();
-    }
-
-    function updateButtons(groupId, activeBtn) {
-        const btns = document.querySelectorAll(`#${groupId} button`);
-        btns.forEach(b => b.classList.remove('active'));
-        activeBtn.classList.add('active');
-    }
-
+    function updateBtns(id, b) { document.querySelectorAll(`#${id} button`).forEach(x => x.classList.remove('active')); b.classList.add('active'); }
+    function quickSet(val) { document.getElementById('amountInput').value = val; calculate(); }
+    
     function calculate() {
-        const inputVal = parseFloat(document.getElementById('amountInput').value) || 0;
-        let invoiceTotal = 0;
-
-        // REPAIRS / DEG Logic
+        const input = parseFloat(document.getElementById('amountInput').value) || 0;
+        let total = 0;
         if (currentType === 'repair' || currentType === 'deg') {
-            if (currentRole === 'customer') {
-                const materialMult = (currentType === 'repair') ? 10 : 20;
-                invoiceTotal = inputVal * materialMult;
-            } else {
-                invoiceTotal = 0; // Free for everyone else
-            }
-        } 
-        // CUSTOMIZATION Logic
-        else {
-            let priceMult = 1.0;
-            if (currentRole === 'customer') priceMult = 1.5;
-            else if (currentRole === 'employee') priceMult = 1.2;
-            else if (currentRole === 'pdems') priceMult = 1.3;
-            
-            invoiceTotal = inputVal * priceMult;
+            if (currentRole === 'customer') total = input * (currentType === 'repair' ? 10 : 20);
+            else total = 0;
+        } else {
+            let m = 1.5;
+            if (currentRole === 'employee') m = 1.2;
+            else if (currentRole === 'pdems') m = 1.3;
+            total = input * m;
         }
-
-        // We don't add this to the total, just showing it for reference
-        const gameTax = invoiceTotal * 0.05;
-
-        document.getElementById('resTotal').innerText = `$${invoiceTotal.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-        document.getElementById('resTax').innerText = `$${gameTax.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+        document.getElementById('resTotal').innerText = `$${total.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
     }
 </script>
-
 </body>
 </html>
