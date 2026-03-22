@@ -8,27 +8,29 @@
         :root {
             --bg-color: #313338; --card-color: #2b2d31; --text-color: #dbdee1;
             --primary-blue: #5865f2; --employee-green: #248046; --repair-red: #da373c;
-            --accent-gold: #f2c45e;
+            --accent-gold: #f2c45e; --gray-btn: #4e5058;
         }
         body { font-family: 'Helvetica Neue', Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
         .calculator-card { background-color: var(--card-color); padding: 24px; border-radius: 8px; width: 380px; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
         h2 { margin: 0 0 5px 0; font-size: 1.2rem; color: #fff; text-align: center;}
         .sub-desc { font-size: 0.8rem; color: #b5bac1; margin-bottom: 20px; text-align: center; border-bottom: 1px solid #4e5058; padding-bottom: 10px; }
-        .group-label { font-size: 0.7rem; font-weight: bold; margin-bottom: 8px; color: #949ba4; text-transform: uppercase; }
+        .group-label { font-size: 0.7rem; font-weight: bold; margin-bottom: 8px; color: #949ba4; text-transform: uppercase; display: flex; justify-content: space-between; }
         .btn-group { display: flex; gap: 5px; margin-bottom: 15px; flex-wrap: wrap; }
         button { border: none; border-radius: 3px; padding: 8px; color: white; cursor: pointer; font-size: 0.8rem; opacity: 0.4; transition: 0.2s; flex: 1; }
         button.active { opacity: 1; outline: 2px solid #fff; }
         .btn-role { background-color: var(--primary-blue); }
-        .btn-type { background-color: #4e5058; }
+        .btn-type { background-color: var(--gray-btn); }
         .btn-repair { background-color: var(--repair-red); }
         .input-section { margin: 15px 0; }
-        input { width: 100%; padding: 12px; background: #1e1f22; border: 1px solid #4e5058; border-radius: 4px; color: white; font-size: 1.1rem; box-sizing: border-box; }
+        input { width: 100%; padding: 12px; background: #1e1f22; border: 1px solid #4e5058; border-radius: 4px; color: white; font-size: 1.1rem; box-sizing: border-box; text-align: center; }
         .results { background: #1e1f22; padding: 15px; border-radius: 4px; margin-top: 15px; border-left: 4px solid var(--accent-gold); }
         .result-line { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.9rem; }
         .total-line { margin-top: 8px; padding-top: 8px; font-weight: bold; color: var(--accent-gold); font-size: 1.3rem; border-top: 1px solid #4e5058; }
-        .item-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 10px; }
-        .item-btn { background: #383a40; padding: 5px; font-size: 0.7rem; opacity: 1; border: 1px solid #4e5058; }
-        .item-btn:hover { background: #404249; }
+        .item-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 5px; margin-bottom: 15px; }
+        .item-btn { background: #383a40; padding: 10px; font-size: 0.75rem; opacity: 1; border: 1px solid #4e5058; color: #fff; text-align: left;}
+        .item-btn span { float: right; color: #949ba4; }
+        .item-btn:hover { background: #4e5058; border-color: #fff; }
+        .clear-link { color: var(--repair-red); cursor: pointer; font-size: 0.7rem; text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -43,57 +45,98 @@
         <button class="btn-role" onclick="setRole('pdems', this)">PD/EMS</button>
     </div>
 
-    <div class="group-label">Service</div>
+    <div class="group-label">Service Type</div>
     <div class="btn-group" id="typeGroup">
-        <button class="btn-repair" onclick="setType('repair', this)">Repair</button>
-        <button class="btn-type" onclick="setType('deg', this)">DEG</button>
-        <button class="btn-type active" onclick="setType('items', this)">Customs</button>
+        <button class="btn-repair" onclick="setType('repair', this)">Repair (10x)</button>
+        <button class="btn-type" onclick="setType('deg', this)">DEG (20x)</button>
+        <button class="btn-type active" onclick="setType('items', this)">Customs (Mult)</button>
     </div>
 
+    <div class="group-label">
+        <span id="inputLabel">Shelf Price</span>
+        <span class="clear-link" onclick="clearInput()">[Clear All]</span>
+    </div>
     <div class="input-section">
-        <div class="group-label" id="inputLabel">Shelf Price ($)</div>
-        <input type="number" id="amountInput" placeholder="0.00" oninput="calculate()">
+        <input type="number" id="amountInput" value="0" oninput="calculate()">
     </div>
 
-    <div class="group-label">Quick Selection</div>
+    <div class="group-label">Shop Items (No Multiplier)</div>
     <div class="item-grid">
-        <button class="item-btn" onclick="quickSet(500)">Lrg Kit ($500)</button>
-        <button class="item-btn" onclick="quickSet(200)">Med Kit ($200)</button>
-        <button class="item-btn" onclick="quickSet(200)">Adv Lock ($200)</button>
-        <button class="item-btn" onclick="quickSet(100)">Lithium ($100)</button>
+        <button class="item-btn" onclick="addFixedItem(500)">Lrg Kit <span>$500</span></button>
+        <button class="item-btn" onclick="addFixedItem(200)">Med Kit <span>$200</span></button>
+        <button class="item-btn" onclick="addFixedItem(200)">Adv Lock <span>$200</span></button>
+        <button class="item-btn" onclick="addFixedItem(500)">Cutters <span>$500</span></button>
+        <button class="item-btn" onclick="addFixedItem(50)">Lockpick <span>$50</span></button>
+        <button class="item-btn" onclick="addFixedItem(100)">Lithium <span>$100</span></button>
     </div>
 
     <div class="results">
         <div class="result-line total-line"><span>Invoice Total:</span> <span id="resTotal">$0.00</span></div>
         <div class="result-line" style="color:#80848e; font-size:0.75rem; margin-top:5px;">
-            <span>Game adds 5% tax automatically.</span>
+            <span id="logicNote">Multiplier Applied</span>
         </div>
     </div>
 </div>
 
 <script>
-    let currentRole = 'customer'; let currentType = 'items';
-    function setRole(r, b) { currentRole = r; updateBtns('roleGroup', b); calculate(); }
-    function setType(t, b) { currentType = t; updateBtns('typeGroup', b); 
-        document.getElementById('inputLabel').innerText = (t === 'items') ? "Shelf Price ($)" : "Materials Used (Qty)";
+    let currentRole = 'customer'; 
+    let currentType = 'items';
+    let fixedTotal = 0; // Items that ignore multipliers
+
+    function setRole(r, b) { 
+        currentRole = r; 
+        updateBtns('roleGroup', b); 
         calculate(); 
     }
-    function updateBtns(id, b) { document.querySelectorAll(`#${id} button`).forEach(x => x.classList.remove('active')); b.classList.add('active'); }
-    function quickSet(val) { document.getElementById('amountInput').value = val; calculate(); }
+
+    function setType(t, b) { 
+        currentType = t; 
+        updateBtns('typeGroup', b); 
+        const label = document.getElementById('inputLabel');
+        label.innerText = (t === 'items') ? "Shelf Price" : "Materials Used";
+        calculate(); 
+    }
+
+    function updateBtns(id, b) { 
+        document.querySelectorAll(`#${id} button`).forEach(x => x.classList.remove('active')); 
+        b.classList.add('active'); 
+    }
+
+    function addFixedItem(val) {
+        fixedTotal += val;
+        calculate();
+    }
+
+    function clearInput() {
+        document.getElementById('amountInput').value = 0;
+        fixedTotal = 0;
+        calculate();
+    }
     
     function calculate() {
         const input = parseFloat(document.getElementById('amountInput').value) || 0;
-        let total = 0;
+        let mainTotal = 0;
+        const note = document.getElementById('logicNote');
+
         if (currentType === 'repair' || currentType === 'deg') {
-            if (currentRole === 'customer') total = input * (currentType === 'repair' ? 10 : 20);
-            else total = 0;
+            if (currentRole === 'customer') {
+                mainTotal = input * (currentType === 'repair' ? 10 : 20);
+            } else {
+                mainTotal = 0; // Free for non-customers
+            }
+            note.innerText = "Repairs/DEG ignore Multipliers";
         } else {
+            // Customs Multiplier
             let m = 1.5;
             if (currentRole === 'employee') m = 1.2;
             else if (currentRole === 'pdems') m = 1.3;
-            total = input * m;
+            
+            mainTotal = input * m;
+            note.innerText = (fixedTotal > 0) ? `Multiplier + ${fixedTotal} in Items` : "Multiplier Applied";
         }
-        document.getElementById('resTotal').innerText = `$${total.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+
+        const finalInvoice = mainTotal + fixedTotal;
+        document.getElementById('resTotal').innerText = `$${finalInvoice.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
     }
 </script>
 </body>
